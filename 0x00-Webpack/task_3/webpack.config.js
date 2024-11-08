@@ -1,76 +1,68 @@
 const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-
+const HTMLWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
-  mode: 'production',
-  entry: {
-    index: path.resolve(__dirname, 'js/dashboard_main.js'),
-  },
-
-  output: {
-    filename: 'bundle.js',
-    path: path.resolve(__dirname, 'public'),
-    publicPath: '/',
-  },
-  mode: 'development',
-  devServer: {
-    static: path.resolve(__dirname, 'public'),
-    port: 8564,
-    open: true,
-  },
-  module: {
-    rules: [
-      {
-	test: /\.css$/i,
-	use: ['style-loader', 'css-loader'],
-      },
-      {
-	test: /\.(png|jpg|jpeg|gif)$/i,
-	type: 'asset/resource',
-	use: [
-	  {
-	    loader: 'image-webpack-loader',
-	    options: {
-	      disable: process.env.NODE_ENV === 'development',
-	      mozjpeg: {
-		progressive: true,
-		quality: 65,
-	      },
-	      optipng: {
-		enabled: false,
-	      },
-	      pngquant: {
-		qaulity: [0.65, 0.9],
-		speed: 4,
-	      },
-	      gifsicle: {
-		interlaced: false,
-	      },
-	      webp: {
-		quality: 75,
-	      },
-	    },
-	  },
-	],
-      },
-    ],
-  },
   plugins: [
-    new HtmlWebpackPlugin({
-      templateContent: `
-	<!DOCTYPE html>
-        <html lang="en">
-          <head>
-            <meta charset="UTF-8" />
-            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-            <title>Holberton Dashboard</title>
-          </head>
-          <body>
-          </body>
-        </html>
-      `,
-      filename: 'index.html',
+    new HTMLWebpackPlugin({
+      filename: './index.html',
     }),
-  ],	
+    new CleanWebpackPlugin(),
+  ],
+  devtool: 'inline-source-map',
+  mode: 'development',
+  entry: {
+    header: {
+      import: './modules/header/header.js',
+      dependOn: 'shared',
+    },
+    body: {
+      import: './modules/body/body.js',
+      dependOn: 'shared',
+    },
+    footer: {
+      import: './modules/footer/footer.js',
+      dependOn: 'shared',
+    },
+    shared: 'jquery',
+  },
+  output: {
+    path: path.resolve(__dirname, 'public'),
+    filename: '[name].bundle.js',
+  },
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+    },
+  },
+  devServer: {
+    static: path.join(__dirname, './public'),
+    open: true,
+    port: 8564,
+  },
+  performance: {
+    maxAssetSize: 1000000,
+  },  
+module: {
+  rules: [
+         {
+           test: /\.css$/i,
+	   use: ["css-loader", "style-loader"],
+	 },
+	 {
+	   test: /\.(?:ico|gif|png|jpe?g|svg)$/i,
+	   type: 'asset/resource',
+           use: [
+		  "file-loader",
+		  {
+		    loader: "image-webpack-loader",
+		    options: {
+			       bypassingOnDebug: true,
+			       disable: true,
+		    },
+		  },
+	   ],
+	 },
+  ],
+},
 };

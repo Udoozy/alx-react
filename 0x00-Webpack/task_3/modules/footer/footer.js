@@ -1,5 +1,5 @@
-import $ from 'jquery';
-import './footer.css';
+const $ = require("jquery");
+import "./footer.css";
 
-
-$('body').append('<footer>Copyright - Holberton School</footer>');
+$("body").append("<footer></footer>");
+$("footer").append("<p>Copyright - Holberton School</p>");
