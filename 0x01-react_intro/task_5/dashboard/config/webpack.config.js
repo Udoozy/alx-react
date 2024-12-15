@@ -17,13 +17,13 @@ module.exports = {
 	//assets and resurce
 	 use: [
            "file-loader",
-	      {
-	        loader: "image-webpack-loader",
-	        options: {
-		  bypassOnDebug: true,
-	   	  disable: true,
-		},
+	    {
+	      loader: "image-webpack-loader",
+	      options: {
+	        bypassOnDebug: true, // webpack@1
+	   	disable: true, //webpack@2
 	      },
+	    },
 	 ],
       },
       {
