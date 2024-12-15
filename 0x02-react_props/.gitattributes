@@ -1,0 +1,8 @@
+* text=auto
+
+# For specific files, enforce LF
+*.sh text eol=lf
+*.js text eol=lf
+
+# For Windows-specific files, enforce CRLF
+*.ps1 text eol=crlf
