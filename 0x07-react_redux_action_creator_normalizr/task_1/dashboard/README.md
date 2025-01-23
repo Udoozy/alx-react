@@ -1,0 +1,1 @@
+Taks 1 of react_redux_action_creator_normilzer
